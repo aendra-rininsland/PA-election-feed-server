@@ -4,9 +4,7 @@
  *
  * This builds a results object from PA XML local election feeds and pushes to S3.
  *
- * Configuration: It expects lftp to be installed or some variety of syncing mechanism
- * between PA and the machine it's being run on. I don't really know of a way
- * to parallelize this. Figure it out yourself. See pa_does_not_understand_the_concept_of_feeds.sh.
+ * Requirements: `lftp` <http://lftp.yar.ru/> is used to sync between FTP and local.
  */
 
 'use strict';
@@ -30,6 +28,7 @@ var resultsFilenameString = (process.env.RESULTS_FILENAME_STRING || 'local_resul
 var ftpUsername = (process.env.FTP_USERNAME || undefined);
 var ftpPassword = (process.env.FTP_PASSWORD || undefined);
 var ftpServer = (process.env.FTP_SERVER || undefined);
+var monitorDir = (process.env.LOCAL_RESULTS_DIRECTORY || process.cwd() + '/data/results');
 
 // Global variables
 var results = [];
@@ -45,7 +44,7 @@ var exec = require('exec-queue');
 
 setInterval(function(){
   console.log('checking...');
-  exec('lftp -e "mirror results /home/ec2-user/election-map/pa-feeds/data/results; bye" ftp://' + ftpUsername + ':' + ftpPassword + '@' + ftpServer,
+  exec('lftp -e "mirror results ' + monitorDir +'; bye" ftp://' + ftpUsername + ':' + ftpPassword + '@' + ftpServer,
   function(error, stdout, stderr) {
     console.log(stdout);
   });
