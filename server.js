@@ -4,9 +4,7 @@
  *
  * This builds a results object from PA XML local election feeds and pushes to S3.
  *
- * Configuration: It expects lftp to be installed or some variety of syncing mechanism
- * between PA and the machine it's being run on. I don't really know of a way
- * to parallelize this. Figure it out yourself. See pa_does_not_understand_the_concept_of_feeds.sh.
+ * Configuration: It expects lftp to be installed; see app.js.
  *
  * Also, I'm shit at OO JavaScript and there's probably a nicer way of accomplishing the following,
  * without resorting to needing a "new" keyword in app.js.
@@ -24,7 +22,8 @@ module.exports = function() {
   // var SOPFilename =  typeof(process.env.SOP_FILENAME) !== 'undefined' ? process.env.SOP_FILENAME : 'SOP.xml';
   // var ReferendumFilename =  typeof(process.env.REFERENDUM_FILENAME) !== 'undefined' ? process.env.SOP_FILENAME : 'referendum_running_totals.xml';
   // var feedType =  typeof(process.env.ELECTIONTYPE) !== 'undefined' ? process.env.ELECTIONTYPE : 'local';
-
+  var mapLocation (process.env.MAP_URL || 'http://nuk-tnl-editorial-prod-staticassets.s3.amazonaws.com/2014/maps/scottish-referendum-map/index.html');
+  
   var client = knox.createClient({
     key: process.env.AWS_KEY,
     secret: process.env.AWS_SECRET,
@@ -191,7 +190,7 @@ module.exports = function() {
             height: 1200
           });
           page.set('settings.localToRemoteUrlAccessEnabled', true);
-          page.open('http://nuk-tnl-editorial-prod-staticassets.s3.amazonaws.com/2014/maps/scottish-referendum-map/index.html', function() {
+          page.open(mapLocation, function() {
             setTimeout(function () {
               page.evaluate(function (selector) {
                   var cr = document.querySelector(selector).getBoundingClientRect();
