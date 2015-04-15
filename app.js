@@ -25,7 +25,7 @@ var libxmljs = require('libxmljs');
 var resultsFilename =  typeof(process.env.RESULTS_FILENAME) !== 'undefined' ? process.env.RESULTS_FILENAME : 'results.json';
 var SOPFilename =  typeof(process.env.SOP_FILENAME) !== 'undefined' ? process.env.SOP_FILENAME : 'SOP.xml';
 var referendumFilename =  typeof(process.env.REFERENDUM_FILENAME) !== 'undefined' ? process.env.REFERENDUM_FILENAME : 'referendum_running_totals.xml';
-var feedType =  typeof(process.env.ELECTIONTYPE) !== 'undefined' ? process.env.ELECTION_TYPE : 'local';
+var feedType =  typeof(process.env.ELECTIONTYPE) !== 'undefined' ? process.env.ELECTION_TYPE : false;
 var resultsFilenameString = (process.env.RESULTS_FILENAME_STRING || 'local_result');
 var ftpUsername = (process.env.FTP_USERNAME || undefined);
 var ftpPassword = (process.env.FTP_PASSWORD || undefined);

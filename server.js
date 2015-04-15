@@ -108,21 +108,31 @@ module.exports = function() {
 
     parseXMLString: function(xmlString, feedType){
       feedType = typeof feedType !== 'undefined' ? feedType : 'local';
-      var xmldoc;
+      var xmldoc, 
+          council, 
+          changesNodes, 
+          newCouncilNodes, 
+          region, 
+          winningParty, 
+          sittingParty, 
+          gainOrHold,
+          changes,
+          newCouncil,
+          results;
 
       if (feedType === 'local') {
         console.log('Parsing a local result...');
         try {
           xmldoc = libxmljs.parseXmlString(xmlString, { noblanks: true });
-          var council = xmldoc.get('//Council');
-          var changesNodes = xmldoc.get('//Changes').childNodes();
-          var newCouncilNodes = xmldoc.get('//NewCouncil').childNodes();
-          var region = council.attr('name').value();
-          var winningParty = council.attr('winningParty').value();
-          var sittingParty = council.attr('sittingParty').value();
-          var gainOrHold = council.attr('gainOrHold').value();
-          var changes = {};
-          var newCouncil = {};
+          council = xmldoc.get('//Council');
+          changesNodes = xmldoc.get('//Changes').childNodes();
+          newCouncilNodes = xmldoc.get('//NewCouncil').childNodes();
+          region = council.attr('name').value();
+          winningParty = council.attr('winningParty').value();
+          sittingParty = council.attr('sittingParty').value();
+          gainOrHold = council.attr('gainOrHold').value();
+          changes = {};
+          newCouncil = {};
           results = {};
 
           changesNodes.forEach(function(party){
@@ -169,6 +179,47 @@ module.exports = function() {
             result.percentage = v.attr('percentageShare').value();
             results[votingArea].push(result);
           });
+
+          return results;
+
+        } catch(err) {
+          console.log('It could not parse this "feed".');
+          console.log('Ignoring! The XML is:');
+          console.log(xmlString);
+          console.dir(err);
+        }
+      } else { // default to general election
+        console.log('Parsing a national election result...');
+        try {
+          xmldoc = libxmljs.parseXmlString(xmlString, { noblanks: true });
+          var constit = xmldoc.get('//Constituency');
+          var resultsNodes = constit.childNodes();
+          var constitName = constit.attr('name').value();
+          winningParty = constit.attr('winningParty').value();
+          sittingParty = constit.attr('sittingParty').value();
+          gainOrHold = constit.attr('gainOrHold').value();
+          results = {};
+
+          resultsNodes.forEach(function(candidate){
+            var partyNode = candidate.childNodes()[0];
+            var partyName = partyNode.attr('abbreviation').value();
+            results[partyName] = {
+              firstName: candidate.attr('firstName'),
+              lastName: candidate.attr('lastName'),
+              votes: partyNode.attr('votes').value(),
+              percentageShare: partyNode.attr('percentageShare').value(),
+              percentageShareChange: partyNode.attr('percentageShareChange').value()
+            };
+          });
+
+
+          console.log('Updating ' + constitName);
+          results[constitName] = {
+            'winningParty' : winningParty,
+            'sittingParty' : sittingParty,
+            'gainOrHold' : gainOrHold,
+            'results' : results,
+          };
 
           return results;
 
