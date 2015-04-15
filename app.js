@@ -81,7 +81,7 @@ saw('data/results/')
 
       // State Of Parties
       else if (file.path.indexOf('SOP') > -1) {
-        SOPfilenameIndex = parseInt(file.path.match(/Local_SOP_(\d+)\.xml/i)[1]);
+        SOPfilenameIndex = parseInt(file.path.match(/SOP_(\d+)\.xml/i)[1]);
         if (SOPfilenameIndex > latestSOP) {
           latestSOP = SOPfilenameIndex;
           latestSOPFilename = file.path;
