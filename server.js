@@ -51,7 +51,6 @@ module.exports = function() {
 
   return {
     pushJSONtoS3:  function(jsonObject, remoteFilename) {
-      console.dir(jsonObject);
       try {
         var filename = (remoteFilename ? remoteFilename : resultsFilename);
         var output = JSON.stringify(jsonObject);
