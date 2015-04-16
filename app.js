@@ -23,6 +23,7 @@ var libxmljs = require('libxmljs');
 
 // var resultsDirectory = typeof(process.env.RESULTS_DIRECTORY) !== 'undefined' ? process.env.RESULTS_DIRECTORY : '/2014/ReferendumResults/';
 var resultsFilename =  typeof(process.env.RESULTS_FILENAME) !== 'undefined' ? process.env.RESULTS_FILENAME : 'results.json';
+var resultsPath = typeof(process.env.RESULTS_PATH) !== 'undefined' ? process.env.RESULTS_PATH : '/home/ec2-user/election-map/pa-feeds/data/results';
 var SOPFilename =  typeof(process.env.SOP_FILENAME) !== 'undefined' ? process.env.SOP_FILENAME : 'SOP.xml';
 var referendumFilename =  typeof(process.env.REFERENDUM_FILENAME) !== 'undefined' ? process.env.REFERENDUM_FILENAME : 'referendum_running_totals.xml';
 var feedType =  typeof(process.env.ELECTIONTYPE) !== 'undefined' ? process.env.ELECTION_TYPE : false;
@@ -45,9 +46,11 @@ var exec = require('exec-queue');
 
 setInterval(function(){
   console.log('checking...');
-  exec('lftp -e "mirror results /home/ec2-user/election-map/pa-feeds/data/results; bye" ftp://' + ftpUsername + ':' + ftpPassword + '@' + ftpServer,
+  exec('lftp -e "mirror results ' + resultsPath + '; bye" ftp://' + ftpUsername + ':' + ftpPassword + '@' + ftpServer,
   function(error, stdout, stderr) {
     console.log(stdout);
+    console.log(error);
+    console.log(stderr);
   });
 }, 60000);
 
@@ -128,7 +131,7 @@ saw('data/results/')
         });
 
       } else if (file.path.indexOf('_SOP_') > -1) {
-        SOPfilenameIndex = file.path.match(/.*?Local_SOP_(\d+)\.xml/i)[1];
+        SOPfilenameIndex = file.path.match(/SOP_(\d+)\.xml/i)[1];
         if (SOPfilenameIndex > latestSOP) {
           latestSOP = SOPfilenameIndex;
           latestSOPFilename = file.path;

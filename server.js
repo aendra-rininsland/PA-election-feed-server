@@ -51,6 +51,7 @@ module.exports = function() {
 
   return {
     pushJSONtoS3:  function(jsonObject, remoteFilename) {
+      console.dir(jsonObject);
       try {
         var filename = (remoteFilename ? remoteFilename : resultsFilename);
         var output = JSON.stringify(jsonObject);
@@ -192,23 +193,24 @@ module.exports = function() {
         console.log('Parsing a national election result...');
         try {
           xmldoc = libxmljs.parseXmlString(xmlString, { noblanks: true });
-          var constit = xmldoc.get('//Constituency');
+          var constit = xmldoc.get('//Election').get('//Constituency');
           var resultsNodes = constit.childNodes();
           var constitName = constit.attr('name').value();
           winningParty = constit.attr('winningParty').value();
           sittingParty = constit.attr('sittingParty').value();
           gainOrHold = constit.attr('gainOrHold').value();
+          var outcome = {};
           results = {};
 
           resultsNodes.forEach(function(candidate){
-            var partyNode = candidate.childNodes()[0];
+            var partyNode = candidate.get('//Party');
             var partyName = partyNode.attr('abbreviation').value();
-            results[partyName] = {
-              firstName: candidate.attr('firstName'),
-              lastName: candidate.attr('lastName'),
+            outcome[partyName] = {
+              firstName: candidate.attr('firstName').value(),
+              lastName: candidate.attr('surname').value(),
               votes: partyNode.attr('votes').value(),
               percentageShare: partyNode.attr('percentageShare').value(),
-              percentageShareChange: partyNode.attr('percentageShareChange').value()
+              percentageShareChange: partyNode.attr('percentageShareChange') ? partyNode.attr('percentageShareChange').value() : 'n/a'
             };
           });
 
@@ -218,7 +220,7 @@ module.exports = function() {
             'winningParty' : winningParty,
             'sittingParty' : sittingParty,
             'gainOrHold' : gainOrHold,
-            'results' : results,
+            'results' : outcome,
           };
 
           return results;
