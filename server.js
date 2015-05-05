@@ -194,6 +194,7 @@ module.exports = function() {
           xmldoc = libxmljs.parseXmlString(xmlString, { noblanks: true });
           var constit = xmldoc.get('//Election').get('//Constituency');
           var resultsNodes = constit.childNodes();
+          console.dir(resultNodes);
           var constitName = constit.attr('name').value();
           winningParty = constit.attr('winningParty').value();
           sittingParty = constit.attr('sittingParty').value();
