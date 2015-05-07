@@ -205,7 +205,7 @@ module.exports = function() {
             var partyName = partyNode.attr('abbreviation').value();
             var partyFullName = partyNode.attr('name').value();
             outcome[partyName] = {
-              partyAbbreviation: partyName.
+              partyAbbreviation: partyName,
               party: partyFullName,
               firstName: candidate.attr('firstName').value(),
               lastName: candidate.attr('surname').value(),
