@@ -68,7 +68,7 @@ module.exports = function() {
         req.end(output);
 
         // Update websockets...
-        eventEmitter.emit('resultsUpdated');
+        // eventEmitter.emit('resultsUpdated');
         return true;
       } catch(e) {
         console.log('Problem pushing to S3...');
@@ -203,7 +203,10 @@ module.exports = function() {
           resultsNodes.forEach(function(candidate){
             var partyNode = candidate.get('Party');
             var partyName = partyNode.attr('abbreviation').value();
+            var partyFullName = partyNode.attr('name').value();
             outcome[partyName] = {
+              partyAbbreviation: partyName.
+              party: partyFullName,
               firstName: candidate.attr('firstName').value(),
               lastName: candidate.attr('surname').value(),
               votes: partyNode.attr('votes').value(),
