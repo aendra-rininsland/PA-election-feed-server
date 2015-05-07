@@ -215,6 +215,7 @@ module.exports = function() {
 
           console.log('Updating ' + constitName);
           results[constitName] = {
+            'name': constitName,
             'winningParty' : winningParty,
             'sittingParty' : sittingParty,
             'gainOrHold' : gainOrHold,
