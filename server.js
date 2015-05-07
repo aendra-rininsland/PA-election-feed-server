@@ -151,7 +151,7 @@ module.exports = function() {
             'changes' : changes,
             'newCouncil' : newCouncil
           };
-
+          
           return results;
 
         } catch(err) {
@@ -194,16 +194,14 @@ module.exports = function() {
           xmldoc = libxmljs.parseXmlString(xmlString, { noblanks: true });
           var constit = xmldoc.get('//Election').get('//Constituency');
           var resultsNodes = constit.childNodes();
-          console.dir(resultNodes);
           var constitName = constit.attr('name').value();
           winningParty = constit.attr('winningParty').value();
           sittingParty = constit.attr('sittingParty').value();
           gainOrHold = constit.attr('gainOrHold').value();
           var outcome = {};
           results = {};
-
           resultsNodes.forEach(function(candidate){
-            var partyNode = candidate.get('//Party');
+            var partyNode = candidate.get('Party');
             var partyName = partyNode.attr('abbreviation').value();
             outcome[partyName] = {
               firstName: candidate.attr('firstName').value(),
@@ -222,6 +220,8 @@ module.exports = function() {
             'gainOrHold' : gainOrHold,
             'results' : outcome,
           };
+          console.dir(results);
+          
 
           return results;
 

@@ -31,6 +31,17 @@ var resultsFilenameString = (process.env.RESULTS_FILENAME_STRING || 'local_resul
 var ftpUsername = (process.env.FTP_USERNAME || undefined);
 var ftpPassword = (process.env.FTP_PASSWORD || undefined);
 var ftpServer = (process.env.FTP_SERVER || undefined);
+console.dir({
+  resultsFilename: resultsFilename, 
+  resultsPath: resultsPath, 
+  SOPFilename: SOPFilename, 
+  referendumFilename: referendumFilename, 
+  feedType: feedType,
+  resultsFilenameString: resultsFilenameString,
+  ftpUsername: ftpUsername,
+  ftpPassword: ftpPassword,
+  ftpServer: ftpServer
+});
 
 // Global variables
 var results = [];
