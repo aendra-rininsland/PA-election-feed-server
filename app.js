@@ -63,7 +63,7 @@ setInterval(function(){
     console.log(error);
     console.log(stderr);
   });
-}, 60000);
+}, 20000);
 
 
 // Watch for changes pulled in via lftp
