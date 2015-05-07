@@ -59,9 +59,9 @@ setInterval(function(){
   console.log('checking...');
   exec('lftp -e "mirror results ' + resultsPath + '; bye" ftp://' + ftpUsername + ':' + ftpPassword + '@' + ftpServer,
   function(error, stdout, stderr) {
-    console.log(stdout);
-    console.log(error);
-    console.log(stderr);
+    if (stdout) console.log(stdout);
+    if (error !== null) console.log(error);
+    if (stderr) console.log(stderr);
   });
 }, 20000);
 
