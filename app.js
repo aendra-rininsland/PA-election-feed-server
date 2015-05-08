@@ -142,7 +142,9 @@ saw('data/results/')
         });
 
       } else if (file.path.indexOf('_SOP_') > -1) {
-        SOPfilenameIndex = file.path.match(/SOP_(\d+)\.xml/i)[1];
+        SOPfilenameIndex = parseInt(file.path.match(/SOP_(\d+)\.xml/i)[1]);
+        console.log('current SOP: ' + latestSOP);
+        console.log('Incoming SOP: ' + SOPfilenameIndex);
         if (SOPfilenameIndex > latestSOP) {
           latestSOP = SOPfilenameIndex;
           latestSOPFilename = file.path;
