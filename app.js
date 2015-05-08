@@ -136,6 +136,7 @@ saw('data/results/')
           if (result) {
             votingArea = Object.keys(result)[0];
             if (resultsFilename.match(/_[^1]\.xml$/)) {
+              console.log(resultsFilename);
               results.forEach(function(v) {
                 if (Object.keys(v)[0] === votingArea) {
                   v = result;
