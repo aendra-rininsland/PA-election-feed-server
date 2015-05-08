@@ -135,7 +135,16 @@ saw('data/results/')
           result = elections.parseXMLString(data, feedType);
           if (result) {
             votingArea = Object.keys(result)[0];
-            results.push(result);
+            if (resultsFilename.match(/_[^1]\.xml$/)) {
+              results.forEach(function(v) {
+                if (Object.keys(v)[0] === votingArea) {
+                  v = result;
+                }
+              });
+            } else {
+              results.push(result);
+            }
+            
           }
           elections.pushJSONtoS3(results, resultsFilename);
           //setTimeout(elections.snapshotMap(), 5000);
